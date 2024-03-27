@@ -1,0 +1,36 @@
+﻿@{ 
+    string currentCase = Request.QueryString["deliveryCase"] ?? "1";
+    string transNum = Request.QueryString["transNum"];
+}
+
+<main>
+    <section class="row" aria-labelledby="aspnetTitle">
+        <div class="border border-1">
+            <h2 style="text-align: center">조회</h2>
+            <hr />
+            <form action="" method="get" class="row mb-2">
+                <select class="col-1 mx-auto" name="deliveryCase">
+                    <option value="1" @(currentCase == "1" ? "selected" : "")>화물</option>
+                    <option value="2" @(currentCase == "2" ? "selected" : "")>구좌</option>
+                </select>
+                <input class="col-8 input-group-text mx-auto" type="text" name="transNum" id="transNum" value="@transNum" required>
+                <button class="btn btn-outline-primary col-2 mx-auto">조회</button>
+            </form>
+            
+
+           @if(!String.IsNullOrEmpty(transNum))
+            {
+                switch (currentCase)
+                {
+                    case "1":
+                        <hr />
+                        @Html.Partial("TransInfoTable")
+                       break;
+                   case "2":
+                        @Html.Partial("HangInfoTable")
+                       break;
+               }
+           }
+        </div>
+    </section>
+</main>

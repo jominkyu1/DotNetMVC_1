@@ -1,0 +1,48 @@
+﻿
+<table class="table table-bordered table-info">
+    <thead>
+    <tr style="text-align: center;">
+        <th colspan="2">수신정보</th>
+        <th colspan="2">발신정보</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>수신처</td>
+        <td>@ViewBag.TransInfo.receiver_name</td>
+        <td>발신처</td>
+        <td>@ViewBag.TransInfo.sender_name</td>
+    </tr>
+
+    <tr>
+        <td>수신지점</td>
+        <td>@ViewBag.TransInfo.receiver_address</td>
+        <td>발신지점</td>
+        <td>@ViewBag.TransInfo.sender_address</td>
+    </tr>
+    </tbody>
+</table>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>영업소</th>
+        <th>배송현황</th>
+        <th>날짜</th>
+        <th>처리자</th>
+    </tr>
+    </thead>
+      
+    @foreach(var item in ViewBag.transList)
+    {
+
+        <tbody>
+        <tr>
+            <td>@item.bra_name</td>
+            <td>@item.cod_cont</td>
+            <td>@item.scann_date  @item.scann_time</td>
+            <td>@item.trs_name</td>
+        </tr>
+        </tbody>
+    }
+</table>

@@ -1,0 +1,93 @@
+@using PagedList
+@using PagedList.Mvc
+
+@{
+    string deliveryCase = Request.QueryString["deliveryCase"];
+    string transNum = Request.QueryString["transNum"];
+    string hangDetail = Request.QueryString["hangDetail"];
+    
+}
+
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css"/>
+
+<table class="table table-bordered table-light w-50">
+    <tr>
+        <th>가방번호</th>
+        <td>
+            <select id="hangList" class="form-select-sm">
+                @foreach (var item in ViewBag.HangList)
+                {
+                    <option @(hangDetail == item["pch_no"] ? "selected" : "")>@item["pch_no"]</option>
+                }
+            </select>
+            <button class="btn btn-info btn-sm" id="btnOk">OK</button>
+            <span class="m-3">Found: <b>@ViewBag.HangList.Count</b></span>
+            <br/>
+            <span id="dateInfo">
+                @if (@ViewBag.HangList.Count > 0)
+                {
+                    <span>개설: @ViewBag.HangList[0]["cre_date"] :: 폐지: @ViewBag.HangList[0]["end_date"]</span>
+                }
+            </span>
+        </td>
+    </tr>
+</table>
+@if (!string.IsNullOrEmpty(ViewBag.HangDetailList.ToString()))
+{
+    <hr/>
+    <h3>Total: @ViewBag.HangDetailList.TotalItemCount</h3>
+<table class="table table-bordered table-striped-columns table-hover">
+    <thead>
+    <tr>
+        <th>영업소</th>
+        <th>스캔구분</th>
+        <th>스캔시각</th>
+        <th>차량번호</th>
+        <th>처리자ID</th>
+        <th>처리자명</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (var item in ViewBag.HangDetailList)
+    {
+        <tr>
+            <td>@item.bra_name</td>
+            <td>@item.cod_cont</td>
+            <td>@item.scann_date @item.scann_time</td>
+            <td>@item.car_id</td>
+            <td>@item.trs_id</td>
+            <td>@item.trs_name</td>
+        </tr>
+    }
+
+    </tbody>
+    <tr>
+        <td colspan="6" class="p-0">
+            <div style="text-align: center;">
+                @Html.PagedListPager((IPagedList)ViewBag.HangDetailList, page =>
+                    Url.Action("Index", new
+                    {
+                        page,
+                        deliveryCase = deliveryCase,
+                        transNum = transNum,
+                        hangDetail = hangDetail
+                    }))
+            </div>
+        </td>
+    </tr>
+</table>
+}
+
+
+
+<script>
+
+    document.getElementById('btnOk').addEventListener('click', function () {
+        var selectedOption = document.getElementById('hangList').value;
+        var encodedOption = encodeURIComponent(selectedOption);
+
+        var newUrl = '/?deliveryCase=@deliveryCase&transNum=@transNum&hangDetail=' + encodedOption;
+        window.location.href = newUrl;
+    })
+</script>
